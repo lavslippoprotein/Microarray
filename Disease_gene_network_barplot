@@ -1,0 +1,29 @@
+# Load required libraries
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(ggplot2)
+
+# Read gene list
+genes <- read.table("genelist.txt", header = FALSE)
+gene_symbols <- genes$V1
+
+# Convert gene symbols to Entrez IDs
+entrez_ids <- bitr(gene_symbols,
+                   fromType = "SYMBOL",
+                   toType = "ENTREZID",
+                   OrgDb = org.Hs.eg.db)
+
+# Disease enrichment analysis (example using DOSE)
+library(DOSE)
+disease_enrich <- enrichDO(entrez_ids$ENTREZID)
+
+# Convert to data frame
+df <- as.data.frame(disease_enrich)
+
+# Bar plot
+ggplot(df[1:10, ], aes(x = reorder(Description, Count), y = Count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  xlab("Disease") +
+  ylab("Gene Count") +
+  ggtitle("Disease Gene Network Enrichment")
