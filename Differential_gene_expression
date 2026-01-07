@@ -1,0 +1,50 @@
+Step 1: Differential Expression Analysis
+
+R Script:
+
+library(limma)
+
+# Expression data
+expr <- read.table("expression_matrix.txt", header = TRUE, row.names = 1)
+
+# Sample group information
+group <- factor(c("Control","Control","Disease","Disease"))
+
+design <- model.matrix(~group)
+fit <- lmFit(expr, design)
+fit <- eBayes(fit)
+
+# Extract top 50 DE genes
+top50 <- topTable(fit, number = 50)
+write.csv(top50, "top50_DEGs.csv")
+
+Result:
+Top 50 differentially expressed genes obtained.
+
+
+---
+
+3(a) Hierarchical Clustering
+
+heatmap(as.matrix(expr[rownames(top50), ]),
+        scale = "row",
+        col = colorRampPalette(c("blue","white","red"))(100))
+
+Inference:
+Genes cluster based on similar expression patterns across samples.
+
+
+---
+
+3(b) K-Means Clustering
+
+set.seed(123)
+kmeans_res <- kmeans(expr[rownames(top50), ], centers = 4)
+
+plot(prcomp(expr[rownames(top50), ])$x,
+     col = kmeans_res$cluster,
+     pch = 16,
+     main = "K-means Clustering of Top 50 DE Genes")
+
+Inference:
+Top DE genes are grouped into 4 distinct expression clusters.
