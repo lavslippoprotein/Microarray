@@ -1,0 +1,30 @@
+echo "This file contains sessional exam notes." > exam.txt
+git status
+git add exam.txt
+git commit -m "Initial commit: added notes.txt"
+
+Output:
+
+git status shows exam.txt as staged
+
+Commit created successfully
+
+
+Result:
+The file exam.txt is successfully tracked and committed.
+
+
+---
+
+1(c) Branching 
+
+Aim:
+To create a new branch, switch to it, and commit changes.
+
+Commands:
+
+git branch feature-update
+git checkout feature-update
+echo "Additional notes added in feature branch." >> exam.txt
+git add exam.txt
+git commit -m "Updated notes in feature branch"
